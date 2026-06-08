@@ -8,6 +8,7 @@ import { LegibilityRail } from './LegibilityRail';
 interface ScoresRailProps {
   s: AppState;
   weights?: Record<string, number>;
+  metricsRev?: number;
 }
 
 export function ScoresRail({ s, weights }: ScoresRailProps) {

@@ -6,7 +6,6 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
-import Tooltip from '@mui/material/Tooltip';
 import CircularProgress from '@mui/material/CircularProgress';
 import { FONTS, FONT_BY_ID, type FontEntry } from './data/fonts';
 import { FontCard } from './components/FontCard';
@@ -21,6 +20,7 @@ import {
   familyToId,
   type GFontItem,
 } from './lib/googleFonts';
+import { measureGoogleFont } from './lib/measureFont';
 
 const MAX_FONTS = 5;
 
@@ -53,9 +53,10 @@ interface FontDrawerProps {
   s: AppState;
   set: (patch: Partial<AppState>) => void;
   onUpload: (file: File) => void;
+  onMetricsReady: () => void;
 }
 
-export function FontDrawer({ s, set, onUpload }: FontDrawerProps) {
+export function FontDrawer({ s, set, onUpload, onMetricsReady }: FontDrawerProps) {
   const active = s.activeFonts;
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -102,6 +103,14 @@ export function FontDrawer({ s, set, onUpload }: FontDrawerProps) {
         };
         FONT_BY_ID[opt.id] = entry;
       }
+      measureGoogleFont(opt.name).then((result) => {
+        const entry = FONT_BY_ID[opt.id];
+        if (entry) {
+          entry.metrics = result.metrics;
+          entry.feat = result.feat;
+          setTimeout(() => onMetricsReady(), 0);
+        }
+      }).catch((err) => { console.warn('measureGoogleFont failed:', err); });
     }
 
     set({ activeFonts: [...active, opt.id] });
@@ -177,7 +186,9 @@ export function FontDrawer({ s, set, onUpload }: FontDrawerProps) {
                   : 'Add a font...'
               }
               slotProps={{
+                ...params.slotProps,
                 input: {
+                  ...(params.slotProps?.input as object | undefined),
                   startAdornment: (
                     <Box sx={{ color: 'text.disabled', display: 'flex', pl: 0.5 }}>
                       {gfLoading

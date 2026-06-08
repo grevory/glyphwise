@@ -50,6 +50,7 @@ export default function App() {
     stateFromUrl(new Set(Object.keys(FONT_BY_ID)))
   );
   const [snack, setSnack] = useState('');
+  const [metricsRev, setMetricsRev] = useState(0);
   const theme = useMemo(() => buildTheme(mode), [mode]);
 
   const set = useCallback((patch: Partial<AppState>) => {
@@ -120,7 +121,7 @@ export default function App() {
             width: 312, flexShrink: 0, borderRight: '1px solid', borderColor: 'divider',
             overflowY: 'auto', display: { xs: 'none', md: 'block' }, bgcolor: 'background.paper',
           }}>
-            <FontDrawer s={s} set={set} onUpload={handleUpload} />
+            <FontDrawer s={s} set={set} onUpload={handleUpload} onMetricsReady={() => setMetricsRev((v) => v + 1)} />
           </Box>
 
           {/* center: workspace */}
@@ -166,7 +167,7 @@ export default function App() {
             width: 324, flexShrink: 0, borderLeft: '1px solid', borderColor: 'divider',
             overflowY: 'auto', display: { xs: 'none', lg: 'block' }, bgcolor: 'background.paper',
           }}>
-            <ScoresRail s={s} weights={LEGIBILITY_WEIGHTS} />
+            <ScoresRail s={s} weights={LEGIBILITY_WEIGHTS} metricsRev={metricsRev} />
           </Box>
         </Box>
       </Box>
