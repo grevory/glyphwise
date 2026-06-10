@@ -1,0 +1,49 @@
+{
+  "name": "@glyphcheck/score",
+  "version": "0.1.0",
+  "description": "Heuristic accessibility + legibility scoring for fonts. Standards-based contrast, heuristic glyph metrics.",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./browser": {
+      "types": "./dist/browser/index.d.ts",
+      "import": "./dist/browser/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint \"src/**/*.ts\" \"*.test.ts\" \"vitest.config.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "peerDependencies": {
+    "opentype.js": "^2.0.0"
+  },
+  "dependencies": {
+    "apca-w3": "^0.1.9"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/opentype.js": "^1.3.10",
+    "eslint": "^10.3.0",
+    "opentype.js": "^2.0.0",
+    "typescript": "^5.4.0",
+    "typescript-eslint": "^8.59.2",
+    "vitest": "^1.6.0"
+  }
+}

@@ -23,7 +23,7 @@ export function Logo({ compact }: LogoProps) {
       {!compact && (
         <Box>
           <Typography sx={{ fontWeight: 700, fontSize: 18, lineHeight: 1, letterSpacing: '-.01em' }}>
-            Glyphwise
+            Glyphcheck
           </Typography>
           <Overline sx={{ fontSize: 9.5, mt: '3px' }}>Font Accessibility Comparator</Overline>
         </Box>

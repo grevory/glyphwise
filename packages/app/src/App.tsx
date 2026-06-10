@@ -156,7 +156,7 @@ export default function App() {
               </Paper>
 
               <Typography sx={{ fontSize: 11, color: 'text.disabled', textAlign: 'center', pb: 1, lineHeight: 1.6 }}>
-                Glyphwise · free fonts served via privacy-first Bunny Fonts · contrast by WCAG 2.2 &amp; APCA (draft) ·
+                Glyphcheck · free fonts served via privacy-first Bunny Fonts · contrast by WCAG 2.2 &amp; APCA (draft) ·
                 legibility scores are heuristics, not certifications.
               </Typography>
             </Box>

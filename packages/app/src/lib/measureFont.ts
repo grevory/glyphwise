@@ -1,6 +1,6 @@
 import * as opentype from 'opentype.js';
-import { scoreFont } from 'glyphwise-score';
-import { canvasRasterizer } from 'glyphwise-score/browser';
+import { scoreFont } from '@glyphcheck/score';
+import { canvasRasterizer } from '@glyphcheck/score/browser';
 import type { FontMetrics, FontFeatures } from '../data/fonts';
 
 async function resolveWoffUrl(family: string): Promise<string> {
@@ -25,7 +25,7 @@ function mapMetrics(results: { id: string; score: number | null }[]): FontMetric
     ctr: get('strokeContrast'),
     xh: get('xHeight'),
     even: get('strokeContrast'), // best available proxy for stroke evenness
-    wd: 60, // advance width — not yet a glyphwise-score metric, use neutral default
+    wd: 60, // advance width — not yet a @glyphcheck/score metric, use neutral default
   };
 }
 
