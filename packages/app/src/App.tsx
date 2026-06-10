@@ -9,6 +9,7 @@ import Tab from '@mui/material/Tab';
 import Snackbar from '@mui/material/Snackbar';
 import { buildTheme } from './theme';
 import { Header } from './Header';
+import { HowItWorksModal } from './HowItWorksModal';
 import { FontDrawer } from './FontDrawer';
 import { SpecimenField } from './SpecimenField';
 import { ControlsBar } from './rail/ControlsBar';
@@ -50,6 +51,7 @@ export default function App() {
     stateFromUrl(new Set(Object.keys(FONT_BY_ID)))
   );
   const [snack, setSnack] = useState('');
+  const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [metricsRev, setMetricsRev] = useState(0);
   const theme = useMemo(() => buildTheme(mode), [mode]);
 
@@ -113,7 +115,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <Header mode={mode} onToggleMode={() => setMode((m) => m === 'dark' ? 'light' : 'dark')} onShare={handleShare} />
+        <Header mode={mode} onToggleMode={() => setMode((m) => m === 'dark' ? 'light' : 'dark')} onShare={handleShare} onHowItWorks={() => setHowItWorksOpen(true)} />
 
         <Box sx={{ flex: 1, display: 'flex', minHeight: 0 }}>
           {/* left: fonts */}
@@ -171,6 +173,8 @@ export default function App() {
           </Box>
         </Box>
       </Box>
+
+      <HowItWorksModal open={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
 
       <Snackbar open={!!snack} autoHideDuration={3200} onClose={() => setSnack('')}
         message={snack} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} />

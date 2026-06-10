@@ -7,15 +7,16 @@ import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { Logo } from './components/Logo';
-import { IconLink, IconSun, IconMoon } from './icons';
+import { IconLink, IconSun, IconMoon, IconQuestion } from './icons';
 
 interface HeaderProps {
   mode: 'light' | 'dark';
   onToggleMode: () => void;
   onShare: () => void;
+  onHowItWorks: () => void;
 }
 
-export function Header({ mode, onToggleMode, onShare }: HeaderProps) {
+export function Header({ mode, onToggleMode, onShare, onHowItWorks }: HeaderProps) {
   return (
     <AppBar position="static" color="default" elevation={0}
       sx={{ bgcolor: 'background.paper', borderBottom: '1px solid', borderColor: 'divider' }}>
@@ -29,6 +30,11 @@ export function Header({ mode, onToggleMode, onShare }: HeaderProps) {
               fontFamily: "'IBM Plex Mono', monospace", fontSize: 10.5,
               color: 'text.secondary', borderColor: 'divider', cursor: 'help',
             }} />
+        </Tooltip>
+        <Tooltip arrow title="How Glyphcheck works — scoring methodology and usage guide">
+          <IconButton onClick={onHowItWorks} sx={{ color: 'text.secondary' }}>
+            <IconQuestion size={20} />
+          </IconButton>
         </Tooltip>
         <Button variant="outlined" startIcon={<IconLink size={15} />} onClick={onShare}
           sx={{

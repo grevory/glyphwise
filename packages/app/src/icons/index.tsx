@@ -122,3 +122,11 @@ export const IconSwap = (p: SvgProps) => (
 export const IconChevron = (p: SvgProps) => (
   <Svg {...p} stroke="currentColor" sw={2} fill="none"><path d="M6 9l6 6 6-6" /></Svg>
 );
+
+export const IconQuestion = (p: SvgProps) => (
+  <Svg {...p} stroke="currentColor" sw={2} fill="none">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M9.5 9.5a2.5 2.5 0 0 1 5 .8c0 1.5-2.5 2.2-2.5 3.7" />
+    <circle cx="12" cy="17" r="0.4" fill="currentColor" />
+  </Svg>
+);
