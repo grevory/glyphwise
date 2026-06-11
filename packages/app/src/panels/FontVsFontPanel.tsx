@@ -7,14 +7,15 @@ import { useTheme, alpha } from '@mui/material/styles';
 import { legibilityScore, legibilityBand, LEGIBILITY_WEIGHTS } from '../lib/legibility';
 import { SPECIMEN_PRESETS } from '../data/specimens';
 import type { AppState } from '../lib/urlState';
+import type { FontEntry } from '../data/fonts';
 import { Surface, FgLabel } from './shared';
 import { specimenStyle, fontList, gridCols, RAMP_SIZES } from './shared-utils';
 
-interface Props { s: AppState; weights?: Record<string, number> }
+interface Props { s: AppState; registry: Record<string, FontEntry>; weights?: Record<string, number> }
 
-export function FontVsFontPanel({ s, weights }: Props) {
+export function FontVsFontPanel({ s, registry, weights }: Props) {
   const theme = useTheme();
-  const fonts = fontList(s);
+  const fonts = fontList(s, registry);
   const text = s.text || SPECIMEN_PRESETS.paragraph;
   const w = weights ?? LEGIBILITY_WEIGHTS;
 

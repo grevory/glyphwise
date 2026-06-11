@@ -6,14 +6,15 @@ import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
 import { genKeyBatch } from '../lib/strings';
 import type { AppState } from '../lib/urlState';
+import type { FontEntry } from '../data/fonts';
 import { Surface, FgLabel } from './shared';
 import { specimenStyle, fontList, gridCols } from './shared-utils';
 import { IconRefresh } from '../icons';
 
-interface Props { s: AppState }
+interface Props { s: AppState; registry: Record<string, FontEntry> }
 
-export function ConfusableStringsPanel({ s }: Props) {
-  const fonts = fontList(s);
+export function ConfusableStringsPanel({ s, registry }: Props) {
+  const fonts = fontList(s, registry);
   const [seed, setSeed] = useState(20260604);
   const keys = useMemo(() => genKeyBatch(seed, 6), [seed]);
 

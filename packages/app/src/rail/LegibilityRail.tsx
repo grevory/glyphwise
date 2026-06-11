@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import { useTheme, alpha } from '@mui/material/styles';
 import { legibilityScore, legibilityBand, LEGIBILITY_WEIGHTS } from '../lib/legibility';
-import { FONT_BY_ID } from '../data/fonts';
+import { FONT_BY_ID, type FontEntry } from '../data/fonts';
 import type { AppState } from '../lib/urlState';
 import { IconType, IconInfo, IconStar } from '../icons';
 import { Overline } from '../components/Overline';
@@ -13,15 +13,16 @@ import { Mono } from '../components/Mono';
 
 interface LegibilityRailProps {
   s: AppState;
+  registry?: Record<string, FontEntry>;
   weights?: Record<string, number>;
 }
 
-export function LegibilityRail({ s, weights }: LegibilityRailProps) {
+export function LegibilityRail({ s, registry = FONT_BY_ID, weights }: LegibilityRailProps) {
   const theme = useTheme();
   const w = weights ?? LEGIBILITY_WEIGHTS;
 
   const all = s.activeFonts
-    .map((id) => FONT_BY_ID[id])
+    .map((id) => registry[id])
     .filter(Boolean)
     .map((f) => ({ f, score: legibilityScore(f, w) }));
 

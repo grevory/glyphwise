@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
-import { FONTS, FONT_BY_ID, type FontEntry } from './data/fonts';
+import { FONTS, type FontEntry } from './data/fonts';
 import { FontCard } from './components/FontCard';
 import { Overline } from './components/Overline';
 import { Mono } from './components/Mono';
@@ -53,10 +53,11 @@ interface FontDrawerProps {
   s: AppState;
   set: (patch: Partial<AppState>) => void;
   onUpload: (file: File) => void;
-  onMetricsReady: () => void;
+  registry: Record<string, FontEntry>;
+  onMetricsReady: (id: string, entry: FontEntry) => void;
 }
 
-export function FontDrawer({ s, set, onUpload, onMetricsReady }: FontDrawerProps) {
+export function FontDrawer({ s, set, onUpload, registry, onMetricsReady }: FontDrawerProps) {
   const active = s.activeFonts;
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -89,27 +90,19 @@ export function FontDrawer({ s, set, onUpload, onMetricsReady }: FontDrawerProps
 
     if (opt.isGf || gfIds.has(opt.id)) {
       loadGoogleFont(opt.name);
-      if (!FONT_BY_ID[opt.id]) {
-        const entry: FontEntry = {
-          id: opt.id,
-          name: opt.name,
-          css: opt.css,
-          cat: opt.cat,
-          bench: false,
-          blurb: `${opt.name} · served via Bunny Fonts CDN`,
-          metrics: null,
-          feat: { tnum: false, zero: false, onum: false, slashDefault: false },
-        };
-        // eslint-disable-next-line react-hooks/immutability
-        FONT_BY_ID[opt.id] = entry;
-      }
+      const base: FontEntry = registry[opt.id] ?? {
+        id: opt.id,
+        name: opt.name,
+        css: opt.css,
+        cat: opt.cat,
+        bench: false,
+        blurb: `${opt.name} · served via Bunny Fonts CDN`,
+        metrics: null,
+        feat: { tnum: false, zero: false, onum: false, slashDefault: false },
+      };
+      onMetricsReady(opt.id, base);
       measureGoogleFont(opt.name).then((result) => {
-        const entry = FONT_BY_ID[opt.id];
-        if (entry) {
-          entry.metrics = result.metrics;
-          entry.feat = result.feat;
-          setTimeout(() => onMetricsReady(), 0);
-        }
+        onMetricsReady(opt.id, { ...base, metrics: result.metrics, feat: result.feat });
       }).catch((err) => { console.warn('measureGoogleFont failed:', err); });
     }
 
@@ -137,7 +130,7 @@ export function FontDrawer({ s, set, onUpload, onMetricsReady }: FontDrawerProps
 
       <Stack spacing={1.25}>
         {active.map((id) => {
-          const f = FONT_BY_ID[id] as FontEntry | undefined;
+          const f = registry[id] as FontEntry | undefined;
           if (!f) return null;
           return (
             <FontCard key={id} font={f} isPrimary={id === active[0]}

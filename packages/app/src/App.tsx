@@ -34,30 +34,46 @@ const TABS = [
 
 const MAX_FONTS = 5;
 
-function ActivePanel({ s }: { s: AppState }) {
-  switch (s.tab) {
-    case 0: return <DisambiguationPanel s={s} />;
-    case 1: return <ConfusableStringsPanel s={s} />;
-    case 2: return <FontVsFontPanel s={s} weights={LEGIBILITY_WEIGHTS} />;
-    case 3: return <StackedPanel s={s} />;
-    case 4: return <NumbersPanel s={s} />;
-    default: return <DisambiguationPanel s={s} />;
-  }
+function AllPanels({ s, registry }: { s: AppState; registry: Record<string, FontEntry> }) {
+  return (
+    <>
+      <Box sx={{ display: s.tab === 0 ? 'block' : 'none' }}><DisambiguationPanel s={s} registry={registry} /></Box>
+      <Box sx={{ display: s.tab === 1 ? 'block' : 'none' }}><ConfusableStringsPanel s={s} registry={registry} /></Box>
+      <Box sx={{ display: s.tab === 2 ? 'block' : 'none' }}><FontVsFontPanel s={s} registry={registry} weights={LEGIBILITY_WEIGHTS} /></Box>
+      <Box sx={{ display: s.tab === 3 ? 'block' : 'none' }}><StackedPanel s={s} registry={registry} /></Box>
+      <Box sx={{ display: s.tab === 4 ? 'block' : 'none' }}><NumbersPanel s={s} registry={registry} /></Box>
+    </>
+  );
 }
 
 export default function App() {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [registry, setRegistry] = useState<Record<string, FontEntry>>(() => ({ ...FONT_BY_ID }));
   const [state, setState] = useState<AppState>(() =>
     stateFromUrl(new Set(Object.keys(FONT_BY_ID)))
   );
   const [snack, setSnack] = useState('');
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
-  const [metricsRev, setMetricsRev] = useState(0);
   const theme = useMemo(() => buildTheme(mode), [mode]);
 
   const set = useCallback((patch: Partial<AppState>) => {
     setState((p) => ({ ...p, ...patch }));
   }, []);
+
+  const handleMetricsReady = useCallback((id: string, entry: FontEntry) => {
+    setRegistry((r) => ({ ...r, [id]: entry }));
+  }, []);
+
+  const handleReset = useCallback(() => set({
+    size: DEFAULT_STATE.size,
+    weight: DEFAULT_STATE.weight,
+    letterSpacing: DEFAULT_STATE.letterSpacing,
+    wordSpacing: DEFAULT_STATE.wordSpacing,
+    lineHeight: DEFAULT_STATE.lineHeight,
+    italic: false,
+    bold: false,
+    ramp: false,
+  }), [set]);
 
   const s = state;
 
@@ -86,7 +102,7 @@ export default function App() {
         metrics: null,
         feat: { tnum: false, zero: false, onum: false, slashDefault: false },
       };
-      FONT_BY_ID[font.id] = font;
+      setRegistry((r) => ({ ...r, [font.id]: font }));
       set({ activeFonts: [...s.activeFonts, font.id] });
       setSnack(`Loaded "${font.name}" locally · 0 bytes uploaded`);
       track('font_selected', { fontName: font.name, source: 'upload' });
@@ -125,22 +141,13 @@ export default function App() {
             width: 312, flexShrink: 0, borderRight: '1px solid', borderColor: 'divider',
             overflowY: 'auto', display: { xs: 'none', md: 'block' }, bgcolor: 'background.paper',
           }}>
-            <FontDrawer s={s} set={set} onUpload={handleUpload} onMetricsReady={() => setMetricsRev((v) => v + 1)} />
+            <FontDrawer s={s} set={set} onUpload={handleUpload} registry={registry} onMetricsReady={handleMetricsReady} />
           </Box>
 
           {/* center: workspace */}
           <Box sx={{ flex: 1, minWidth: 0, overflowY: 'auto', bgcolor: 'background.default' }}>
             <Box sx={{ p: { xs: 2, md: 2.5 }, display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 1280, mx: 'auto' }}>
-              <ControlsBar s={s} set={set} onReset={() => set({
-                size: DEFAULT_STATE.size,
-                weight: DEFAULT_STATE.weight,
-                letterSpacing: DEFAULT_STATE.letterSpacing,
-                wordSpacing: DEFAULT_STATE.wordSpacing,
-                lineHeight: DEFAULT_STATE.lineHeight,
-                italic: false,
-                bold: false,
-                ramp: false,
-              })} />
+              <ControlsBar s={s} set={set} onReset={handleReset} />
 
               <Paper variant="outlined" sx={{ borderRadius: 3, borderColor: 'divider', overflow: 'hidden' }}>
                 <Tabs value={s.tab} onChange={handleTabChange} variant="scrollable"
@@ -155,7 +162,7 @@ export default function App() {
                   {showSpecimenField && (
                     <Box sx={{ mb: 1.75 }}><SpecimenField s={s} set={set} /></Box>
                   )}
-                  <ActivePanel s={s} />
+                  <AllPanels s={s} registry={registry} />
                 </Box>
               </Paper>
 
@@ -171,7 +178,7 @@ export default function App() {
             width: 324, flexShrink: 0, borderLeft: '1px solid', borderColor: 'divider',
             overflowY: 'auto', display: { xs: 'none', lg: 'block' }, bgcolor: 'background.paper',
           }}>
-            <ScoresRail s={s} weights={LEGIBILITY_WEIGHTS} metricsRev={metricsRev} />
+            <ScoresRail s={s} registry={registry} weights={LEGIBILITY_WEIGHTS} />
           </Box>
         </Box>
       </Box>

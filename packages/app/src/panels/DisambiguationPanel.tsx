@@ -6,13 +6,14 @@ import Divider from '@mui/material/Divider';
 import { alpha } from '@mui/material/styles';
 import { CONFUSABLES } from '../data/specimens';
 import type { AppState } from '../lib/urlState';
+import type { FontEntry } from '../data/fonts';
 import { Surface, FgLabel } from './shared';
 import { specimenStyle, fontList, gridCols } from './shared-utils';
 
-interface Props { s: AppState }
+interface Props { s: AppState; registry: Record<string, FontEntry> }
 
-export function DisambiguationPanel({ s }: Props) {
-  const fonts = fontList(s);
+export function DisambiguationPanel({ s, registry }: Props) {
+  const fonts = fontList(s, registry);
 
   return (
     <Surface s={s}>

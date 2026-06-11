@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useTheme } from '@mui/material/styles';
 import { wcagReport, apcaLc, apcaGuide } from '../lib/contrast';
 import type { AppState } from '../lib/urlState';
-import { FONT_BY_ID } from '../data/fonts';
+import { FONT_BY_ID, type FontEntry } from '../data/fonts';
 import { IconContrast, IconCheck, IconClose } from '../icons';
 import { Overline } from '../components/Overline';
 import { Mono } from '../components/Mono';
@@ -30,9 +30,10 @@ function PassChip({ ok, label }: { ok: boolean; label: string }) {
 
 interface ContrastCardProps {
   s: AppState;
+  registry?: Record<string, FontEntry>;
 }
 
-export function ContrastCard({ s }: ContrastCardProps) {
+export function ContrastCard({ s, registry = FONT_BY_ID }: ContrastCardProps) {
   const theme = useTheme();
   const rep = wcagReport(s.fg, s.bg);
   const lc = apcaLc(s.fg, s.bg);
@@ -43,7 +44,7 @@ export function ContrastCard({ s }: ContrastCardProps) {
     ? theme.palette.warning.main
     : theme.palette.error.main;
 
-  const primaryFont = FONT_BY_ID[s.activeFonts[0]];
+  const primaryFont = registry[s.activeFonts[0]];
 
   return (
     <Box>

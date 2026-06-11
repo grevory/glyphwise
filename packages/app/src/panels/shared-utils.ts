@@ -28,8 +28,8 @@ export function specimenStyle(s: AppState, fontCss: string, extra?: Partial<Spec
   };
 }
 
-export function fontList(s: AppState): FontEntry[] {
-  return s.activeFonts.map((id) => FONT_BY_ID[id]).filter(Boolean) as FontEntry[];
+export function fontList(s: AppState, registry: Record<string, FontEntry> = FONT_BY_ID): FontEntry[] {
+  return s.activeFonts.map((id) => registry[id]).filter(Boolean) as FontEntry[];
 }
 
 export function gridCols(n: number): React.CSSProperties {

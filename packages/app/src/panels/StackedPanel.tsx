@@ -4,13 +4,14 @@ import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import { SPECIMEN_PRESETS } from '../data/specimens';
 import type { AppState } from '../lib/urlState';
+import type { FontEntry } from '../data/fonts';
 import { Surface, FgLabel } from './shared';
 import { specimenStyle, fontList } from './shared-utils';
 
-interface Props { s: AppState }
+interface Props { s: AppState; registry: Record<string, FontEntry> }
 
-export function StackedPanel({ s }: Props) {
-  const fonts = fontList(s);
+export function StackedPanel({ s, registry }: Props) {
+  const fonts = fontList(s, registry);
   const text = s.text || SPECIMEN_PRESETS.pangram;
 
   return (

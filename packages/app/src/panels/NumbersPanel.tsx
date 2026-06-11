@@ -8,6 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { alpha } from '@mui/material/styles';
 import { NUMBER_ROWS } from '../data/specimens';
 import type { AppState } from '../lib/urlState';
+import type { FontEntry } from '../data/fonts';
 import { Surface, FgLabel } from './shared';
 import { specimenStyle, fontList, gridCols } from './shared-utils';
 
@@ -37,10 +38,10 @@ function FeatToggle({ s, on, onClick, children, title }: FeatToggleProps) {
   );
 }
 
-interface Props { s: AppState }
+interface Props { s: AppState; registry: Record<string, FontEntry> }
 
-export function NumbersPanel({ s }: Props) {
-  const fonts = fontList(s);
+export function NumbersPanel({ s, registry }: Props) {
+  const fonts = fontList(s, registry);
   const [tnum, setTnum] = useState(true);
   const [lining, setLining] = useState(true);
   const [slash, setSlash] = useState(false);
