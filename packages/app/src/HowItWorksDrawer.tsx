@@ -1,7 +1,5 @@
 import React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
+import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -67,21 +65,23 @@ const GRADE_BANDS = [
   { grade: 'F', range: '0–39', desc: 'Very poor — failing on multiple dimensions.' },
 ];
 
-export function HowItWorksModal({ open, onClose }: Props) {
+export function HowItWorksDrawer({ open, onClose }: Props) {
   const theme = useTheme();
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth
-      slotProps={{ paper: { sx: { borderRadius: 3 } } }}>
-      <DialogTitle sx={{ pr: 6, pb: 1, fontWeight: 700, fontSize: 18 }}>
-        How Glyphcheck works
-        <IconButton onClick={onClose} size="small"
-          sx={{ position: 'absolute', top: 12, right: 12, color: 'text.secondary' }}>
+    <Drawer anchor="right" open={open} onClose={onClose}
+      slotProps={{ paper: { sx: { width: 'min(440px, 100vw)', bgcolor: 'background.paper' } } }}>
+      <Box sx={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        px: 2.5, py: 1.5, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0,
+      }}>
+        <Typography sx={{ fontWeight: 700, fontSize: 18 }}>How Glyphcheck works</Typography>
+        <IconButton onClick={onClose} size="small" sx={{ color: 'text.secondary' }}>
           <IconClose size={18} />
         </IconButton>
-      </DialogTitle>
+      </Box>
 
-      <DialogContent sx={{ pt: 0.5, pb: 3 }}>
+      <Box sx={{ overflowY: 'auto', px: 2.5, pt: 2, pb: 3 }}>
         {/* Usage */}
         <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7, mb: 2.5 }}>
           Pick fonts from the left panel (up to 5). Set your text and background colors in the
@@ -180,7 +180,7 @@ export function HowItWorksModal({ open, onClose }: Props) {
             </Typography>
           ))}
         </Stack>
-      </DialogContent>
-    </Dialog>
+      </Box>
+    </Drawer>
   );
 }

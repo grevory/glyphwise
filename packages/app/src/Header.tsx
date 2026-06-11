@@ -2,7 +2,6 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { Logo } from './components/Logo';
@@ -28,13 +27,11 @@ export function Header({ mode, onToggleMode, onShare, onHowItWorks }: HeaderProp
             <IconQuestion size={20} />
           </IconButton>
         </Tooltip>
-        <Button variant="outlined" startIcon={<IconLink size={15} />} onClick={onShare}
-          sx={{
-            textTransform: 'none', borderColor: 'divider', color: 'text.primary',
-            '&:hover': { borderColor: 'text.secondary' },
-          }}>
-          Share
-        </Button>
+        <Tooltip arrow title="Copy share link">
+          <IconButton onClick={onShare} sx={{ color: 'text.secondary' }}>
+            <IconLink size={20} />
+          </IconButton>
+        </Tooltip>
         <Tooltip arrow title={mode === 'dark' ? 'Switch to light' : 'Switch to dark'}>
           <IconButton onClick={onToggleMode} sx={{ color: 'text.secondary' }}>
             {mode === 'dark' ? <IconSun size={20} /> : <IconMoon size={20} />}

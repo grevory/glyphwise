@@ -9,7 +9,7 @@ import Tab from '@mui/material/Tab';
 import Snackbar from '@mui/material/Snackbar';
 import { buildTheme } from './theme';
 import { Header } from './Header';
-import { HowItWorksModal } from './HowItWorksModal';
+import { HowItWorksDrawer } from './HowItWorksDrawer';
 import { FontDrawer } from './FontDrawer';
 import { SpecimenField } from './SpecimenField';
 import { ControlsBar } from './rail/ControlsBar';
@@ -183,7 +183,7 @@ export default function App() {
         </Box>
       </Box>
 
-      <HowItWorksModal open={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
+      <HowItWorksDrawer open={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
 
       <Snackbar open={!!snack} autoHideDuration={3200} onClose={() => setSnack('')}
         message={snack} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} />
