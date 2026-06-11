@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -14,6 +14,14 @@ interface Props { s: AppState; registry: Record<string, FontEntry> }
 
 export function DisambiguationPanel({ s, registry }: Props) {
   const fonts = fontList(s, registry);
+  const glyphSize = Math.max(s.size, 14) * 1.35;
+  const fontIds = fonts.map((f) => f.id).join(',');
+
+  const fontStyles = useMemo(
+    () => fonts.map((f) => specimenStyle(s, f.css, { fontSize: glyphSize }) as React.CSSProperties),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fontIds, s.fg, s.bold, s.italic, s.letterSpacing, glyphSize],
+  );
 
   return (
     <Surface s={s}>
@@ -44,12 +52,12 @@ export function DisambiguationPanel({ s, registry }: Props) {
               </Typography>
               <Typography sx={{ fontSize: 10.5, color: s.fg, opacity: 0.5 }}>{set.label}</Typography>
             </Box>
-            {fonts.map((f) => (
+            {fonts.map((f, fi) => (
               <Box key={f.id} sx={{ pl: 1, display: 'inline-flex', gap: '0.3em', flexWrap: 'wrap' }}>
                 {[...set.chars].map((ch, i) =>
                   ch === ' '
                     ? <Box key={i} sx={{ width: '0.5em' }} />
-                    : <span key={i} style={specimenStyle(s, f.css, { fontSize: Math.max(s.size, 14) * 1.35 }) as React.CSSProperties}>{ch}</span>
+                    : <span key={i} style={fontStyles[fi]}>{ch}</span>
                 )}
               </Box>
             ))}

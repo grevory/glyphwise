@@ -6,22 +6,21 @@ import Tooltip from '@mui/material/Tooltip';
 import { useTheme, alpha } from '@mui/material/styles';
 import { legibilityScore, legibilityBand, LEGIBILITY_WEIGHTS } from '../lib/legibility';
 import { FONT_BY_ID, type FontEntry } from '../data/fonts';
-import type { AppState } from '../lib/urlState';
 import { IconType, IconInfo, IconStar } from '../icons';
 import { Overline } from '../components/Overline';
 import { Mono } from '../components/Mono';
 
 interface LegibilityRailProps {
-  s: AppState;
+  activeFonts: string[];
   registry?: Record<string, FontEntry>;
   weights?: Record<string, number>;
 }
 
-export function LegibilityRail({ s, registry = FONT_BY_ID, weights }: LegibilityRailProps) {
+export const LegibilityRail = React.memo(function LegibilityRail({ activeFonts, registry = FONT_BY_ID, weights }: LegibilityRailProps) {
   const theme = useTheme();
   const w = weights ?? LEGIBILITY_WEIGHTS;
 
-  const all = s.activeFonts
+  const all = activeFonts
     .map((id) => registry[id])
     .filter(Boolean)
     .map((f) => ({ f, score: legibilityScore(f, w) }));
@@ -46,7 +45,7 @@ export function LegibilityRail({ s, registry = FONT_BY_ID, weights }: Legibility
         {ranked.map(({ f, score }, i) => {
           const band = legibilityBand(score);
           const col = theme.palette[band.color].main;
-          const isPrimary = f.id === s.activeFonts[0];
+          const isPrimary = f.id === activeFonts[0];
           return (
             <Box key={f.id}>
               <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center', mb: '3px' }}>
@@ -94,4 +93,4 @@ export function LegibilityRail({ s, registry = FONT_BY_ID, weights }: Legibility
       </Typography>
     </Box>
   );
-}
+});

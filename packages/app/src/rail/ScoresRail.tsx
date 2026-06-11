@@ -15,9 +15,9 @@ interface ScoresRailProps {
 export function ScoresRail({ s, registry, weights }: ScoresRailProps) {
   return (
     <Box sx={{ p: 2 }}>
-      <ContrastCard s={s} registry={registry} />
+      <ContrastCard fg={s.fg} bg={s.bg} primaryFontId={s.activeFonts[0]} registry={registry} />
       <Divider sx={{ my: 2 }} />
-      <LegibilityRail s={s} registry={registry} weights={weights} />
+      <LegibilityRail activeFonts={s.activeFonts} registry={registry} weights={weights} />
     </Box>
   );
 }

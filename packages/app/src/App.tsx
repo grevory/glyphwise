@@ -141,7 +141,7 @@ export default function App() {
             width: 312, flexShrink: 0, borderRight: '1px solid', borderColor: 'divider',
             overflowY: 'auto', display: { xs: 'none', md: 'block' }, bgcolor: 'background.paper',
           }}>
-            <FontDrawer s={s} set={set} onUpload={handleUpload} registry={registry} onMetricsReady={handleMetricsReady} />
+            <FontDrawer activeFonts={s.activeFonts} set={set} onUpload={handleUpload} registry={registry} onMetricsReady={handleMetricsReady} />
           </Box>
 
           {/* center: workspace */}

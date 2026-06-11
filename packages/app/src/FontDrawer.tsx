@@ -50,15 +50,14 @@ function gfToOption(g: GFontItem): Option {
 }
 
 interface FontDrawerProps {
-  s: AppState;
+  activeFonts: string[];
   set: (patch: Partial<AppState>) => void;
   onUpload: (file: File) => void;
   registry: Record<string, FontEntry>;
   onMetricsReady: (id: string, entry: FontEntry) => void;
 }
 
-export function FontDrawer({ s, set, onUpload, registry, onMetricsReady }: FontDrawerProps) {
-  const active = s.activeFonts;
+export const FontDrawer = React.memo(function FontDrawer({ activeFonts: active, set, onUpload, registry, onMetricsReady }: FontDrawerProps) {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [gfCatalog, setGfCatalog] = useState<GFontItem[]>([]);
@@ -230,4 +229,4 @@ export function FontDrawer({ s, set, onUpload, registry, onMetricsReady }: FontD
       )}
     </Box>
   );
-}
+});

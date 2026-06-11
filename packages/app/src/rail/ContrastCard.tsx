@@ -7,7 +7,6 @@ import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 import { useTheme } from '@mui/material/styles';
 import { wcagReport, apcaLc, apcaGuide } from '../lib/contrast';
-import type { AppState } from '../lib/urlState';
 import { FONT_BY_ID, type FontEntry } from '../data/fonts';
 import { IconContrast, IconCheck, IconClose } from '../icons';
 import { Overline } from '../components/Overline';
@@ -29,14 +28,16 @@ function PassChip({ ok, label }: { ok: boolean; label: string }) {
 }
 
 interface ContrastCardProps {
-  s: AppState;
+  fg: string;
+  bg: string;
+  primaryFontId: string;
   registry?: Record<string, FontEntry>;
 }
 
-export function ContrastCard({ s, registry = FONT_BY_ID }: ContrastCardProps) {
+export const ContrastCard = React.memo(function ContrastCard({ fg, bg, primaryFontId, registry = FONT_BY_ID }: ContrastCardProps) {
   const theme = useTheme();
-  const rep = wcagReport(s.fg, s.bg);
-  const lc = apcaLc(s.fg, s.bg);
+  const rep = wcagReport(fg, bg);
+  const lc = apcaLc(fg, bg);
   const guide = apcaGuide(lc);
   const ratioColor = rep.aaBody
     ? theme.palette.success.main
@@ -44,7 +45,7 @@ export function ContrastCard({ s, registry = FONT_BY_ID }: ContrastCardProps) {
     ? theme.palette.warning.main
     : theme.palette.error.main;
 
-  const primaryFont = registry[s.activeFonts[0]];
+  const primaryFont = registry[primaryFontId];
 
   return (
     <Box>
@@ -55,7 +56,7 @@ export function ContrastCard({ s, registry = FONT_BY_ID }: ContrastCardProps) {
 
       <Paper variant="outlined" sx={{ borderRadius: 2.5, overflow: 'hidden', borderColor: 'divider' }}>
         <Box sx={{
-          bgcolor: s.bg, color: s.fg, px: 2, py: 1.5,
+          bgcolor: bg, color: fg, px: 2, py: 1.5,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <Box sx={{ fontFamily: primaryFont?.css, fontSize: 28, fontWeight: 600, lineHeight: 1 }}>
@@ -99,4 +100,4 @@ export function ContrastCard({ s, registry = FONT_BY_ID }: ContrastCardProps) {
       </Paper>
     </Box>
   );
-}
+});
