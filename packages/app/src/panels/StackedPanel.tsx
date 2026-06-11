@@ -4,7 +4,8 @@ import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import { SPECIMEN_PRESETS } from '../data/specimens';
 import type { AppState } from '../lib/urlState';
-import { Surface, FgLabel, specimenStyle, fontList } from './shared';
+import { Surface, FgLabel } from './shared';
+import { specimenStyle, fontList } from './shared-utils';
 
 interface Props { s: AppState }
 

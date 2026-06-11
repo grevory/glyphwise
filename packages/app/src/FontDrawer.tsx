@@ -61,11 +61,10 @@ export function FontDrawer({ s, set, onUpload, onMetricsReady }: FontDrawerProps
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [gfCatalog, setGfCatalog] = useState<GFontItem[]>([]);
-  const [gfLoading, setGfLoading] = useState(false);
+  const [gfLoading, setGfLoading] = useState(true);
   const [gfError, setGfError] = useState(false);
 
   useEffect(() => {
-    setGfLoading(true);
     fetchGoogleFontsCatalog()
       .then((items) => { setGfCatalog(items); setGfLoading(false); })
       .catch(() => { setGfError(true); setGfLoading(false); });
@@ -101,6 +100,7 @@ export function FontDrawer({ s, set, onUpload, onMetricsReady }: FontDrawerProps
           metrics: null,
           feat: { tnum: false, zero: false, onum: false, slashDefault: false },
         };
+        // eslint-disable-next-line react-hooks/immutability
         FONT_BY_ID[opt.id] = entry;
       }
       measureGoogleFont(opt.name).then((result) => {

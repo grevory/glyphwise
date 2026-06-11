@@ -7,7 +7,8 @@ import { useTheme, alpha } from '@mui/material/styles';
 import { legibilityScore, legibilityBand, LEGIBILITY_WEIGHTS } from '../lib/legibility';
 import { SPECIMEN_PRESETS } from '../data/specimens';
 import type { AppState } from '../lib/urlState';
-import { Surface, FgLabel, specimenStyle, fontList, gridCols, RAMP_SIZES } from './shared';
+import { Surface, FgLabel } from './shared';
+import { specimenStyle, fontList, gridCols, RAMP_SIZES } from './shared-utils';
 
 interface Props { s: AppState; weights?: Record<string, number> }
 

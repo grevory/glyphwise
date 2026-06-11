@@ -6,7 +6,8 @@ import Divider from '@mui/material/Divider';
 import { alpha } from '@mui/material/styles';
 import { CONFUSABLES } from '../data/specimens';
 import type { AppState } from '../lib/urlState';
-import { Surface, FgLabel, specimenStyle, fontList, gridCols } from './shared';
+import { Surface, FgLabel } from './shared';
+import { specimenStyle, fontList, gridCols } from './shared-utils';
 
 interface Props { s: AppState }
 

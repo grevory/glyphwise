@@ -8,7 +8,8 @@ import Tooltip from '@mui/material/Tooltip';
 import { alpha } from '@mui/material/styles';
 import { NUMBER_ROWS } from '../data/specimens';
 import type { AppState } from '../lib/urlState';
-import { Surface, FgLabel, specimenStyle, fontList, gridCols } from './shared';
+import { Surface, FgLabel } from './shared';
+import { specimenStyle, fontList, gridCols } from './shared-utils';
 
 interface FeatToggleProps {
   s: AppState;

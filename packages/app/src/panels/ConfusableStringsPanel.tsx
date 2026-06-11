@@ -6,7 +6,8 @@ import Button from '@mui/material/Button';
 import { alpha } from '@mui/material/styles';
 import { genKeyBatch } from '../lib/strings';
 import type { AppState } from '../lib/urlState';
-import { Surface, FgLabel, specimenStyle, fontList, gridCols } from './shared';
+import { Surface, FgLabel } from './shared';
+import { specimenStyle, fontList, gridCols } from './shared-utils';
 import { IconRefresh } from '../icons';
 
 interface Props { s: AppState }

@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git diff --quiet HEAD 2>/dev/null || (echo '' && echo 'Suggested commit message:' && echo '' && git diff --stat HEAD | head -20 && echo '' && git diff --cached --stat | head -20)"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // .tool_response.filePath' | { read -r f; if echo \"$f\" | grep -q 'packages/score'; then npm run test -w packages/score --silent 2>&1 | tail -5; fi; }"
+          }
+        ]
+      }
+    ]
+  }
+}
