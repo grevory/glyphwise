@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
@@ -15,6 +15,7 @@ import { ColorField } from '../components/ColorField';
 import { Overline } from '../components/Overline';
 import { Mono } from '../components/Mono';
 import type { AppState } from '../lib/urlState';
+import { trackTextSettingChanged } from '../analytics';
 
 interface LabeledSliderProps {
   label: string;
@@ -50,6 +51,11 @@ interface ControlsBarProps {
 
 export function ControlsBar({ s, set, onReset }: ControlsBarProps) {
   const [open, setOpen] = useState(false);
+  const trackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const trackDebounced = (setting: string, value: string | number) => {
+    if (trackTimer.current) clearTimeout(trackTimer.current);
+    trackTimer.current = setTimeout(() => trackTextSettingChanged(setting, value), 600);
+  };
 
   return (
     <Paper variant="outlined" sx={{ borderRadius: 3, p: 1.75, borderColor: 'divider' }}>
@@ -72,14 +78,14 @@ export function ControlsBar({ s, set, onReset }: ControlsBarProps) {
 
         <Box sx={{ flex: 1 }} />
 
-        <ColorField label="Text" value={s.fg} onChange={(v) => set({ fg: v })} />
+        <ColorField label="Text" value={s.fg} onChange={(v) => { set({ fg: v }); trackDebounced('text_color', v); }} />
         <Tooltip arrow title="Swap foreground / background (polarity)">
           <IconButton size="small" onClick={() => set({ fg: s.bg, bg: s.fg })}
             sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
             <IconSwap size={16} />
           </IconButton>
         </Tooltip>
-        <ColorField label="Background" value={s.bg} onChange={(v) => set({ bg: v })} />
+        <ColorField label="Background" value={s.bg} onChange={(v) => { set({ bg: v }); trackDebounced('background_color', v); }} />
 
         <Tooltip arrow title={open ? 'Hide text settings' : 'Text size, weight, spacing'}>
           <IconButton size="small" onClick={() => setOpen((v) => !v)}
@@ -110,15 +116,15 @@ export function ControlsBar({ s, set, onReset }: ControlsBarProps) {
         </Stack>
         <Stack direction="row" spacing={2.5} sx={{ rowGap: 1, flexWrap: 'wrap' }}>
           <LabeledSlider label="Size" unit="px" value={s.size} min={8} max={40} step={1}
-            onChange={(v) => set({ size: v })} />
+            onChange={(v) => { set({ size: v }); trackDebounced('font_size', `${v}px`); }} />
           <LabeledSlider label="Weight" value={s.weight} min={300} max={800} step={100}
-            onChange={(v) => set({ weight: v })} />
+            onChange={(v) => { set({ weight: v }); trackDebounced('font_weight', v); }} />
           <LabeledSlider label="Tracking" unit="em" value={s.letterSpacing} min={-0.05} max={0.3} step={0.01}
-            fmt={(v) => v.toFixed(2)} onChange={(v) => set({ letterSpacing: v })} />
+            fmt={(v) => v.toFixed(2)} onChange={(v) => { set({ letterSpacing: v }); trackDebounced('letter_spacing', `${v.toFixed(2)}em`); }} />
           <LabeledSlider label="Word space" unit="em" value={s.wordSpacing} min={0} max={1} step={0.05}
-            fmt={(v) => v.toFixed(2)} onChange={(v) => set({ wordSpacing: v })} />
+            fmt={(v) => v.toFixed(2)} onChange={(v) => { set({ wordSpacing: v }); trackDebounced('word_spacing', `${v.toFixed(2)}em`); }} />
           <LabeledSlider label="Leading" value={s.lineHeight} min={1} max={2.4} step={0.05}
-            fmt={(v) => v.toFixed(2)} onChange={(v) => set({ lineHeight: v })} />
+            fmt={(v) => v.toFixed(2)} onChange={(v) => { set({ lineHeight: v }); trackDebounced('line_height', v.toFixed(2)); }} />
         </Stack>
       </Collapse>
     </Paper>

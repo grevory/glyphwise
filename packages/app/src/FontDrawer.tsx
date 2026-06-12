@@ -21,6 +21,7 @@ import {
   type GFontItem,
 } from './lib/googleFonts';
 import { measureGoogleFont } from './lib/measureFont';
+import { trackFontSelected } from './analytics';
 
 const MAX_FONTS = 5;
 
@@ -105,6 +106,9 @@ export const FontDrawer = React.memo(function FontDrawer({ activeFonts: active, 
       }).catch((err) => { console.warn('measureGoogleFont failed:', err); });
     }
 
+    const slot = `font_${String.fromCharCode(97 + active.length)}`;
+    const source = opt.isGf || gfIds.has(opt.id) ? 'google' : 'system';
+    trackFontSelected(slot, opt.name, source);
     set({ activeFonts: [...active, opt.id] });
   };
 

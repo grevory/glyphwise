@@ -23,7 +23,7 @@ import { NumbersPanel } from './panels/NumbersPanel';
 import { FONT_BY_ID, type FontEntry } from './data/fonts';
 import { DEFAULT_STATE, stateFromUrl, encodeState, type AppState } from './lib/urlState';
 import { LEGIBILITY_WEIGHTS } from './lib/legibility';
-import { track } from './analytics';
+import { trackFontSelected, trackCustomFontUploaded, trackTabChanged, trackResultShared } from './analytics';
 
 const TABS = [
   { label: 'Disambiguation' },
@@ -108,7 +108,9 @@ export default function App() {
       setRegistry((r) => ({ ...r, [font.id]: font }));
       set({ activeFonts: [...s.activeFonts, font.id] });
       setSnack(`Loaded "${font.name}" locally · 0 bytes uploaded`);
-      track('font_selected', { fontName: font.name, source: 'upload' });
+      const slot = `font_${String.fromCharCode(97 + s.activeFonts.length)}`;
+      trackCustomFontUploaded(slot, file.name, Math.round(file.size / 1024));
+      trackFontSelected(slot, font.name, 'custom');
     } catch {
       setSnack('Could not read that font file.');
     }
@@ -122,14 +124,16 @@ export default function App() {
     } catch {
       setSnack('Permalink is in the address bar');
     }
-    track('comparison_run', { tab: s.tab });
+    const [fontA, fontB] = s.activeFonts.map((id) => registry[id]?.name ?? id);
+    trackResultShared(fontA ?? '', fontB ?? '', s.tab);
   };
 
   const showSpecimenField = s.tab === 2 || s.tab === 3;
 
   const handleTabChange = (_: React.SyntheticEvent, v: number) => {
     set({ tab: v });
-    track('test_changed', { tab: v });
+    const [fontA, fontB] = s.activeFonts.map((id) => registry[id]?.name ?? id);
+    trackTabChanged(v, fontA ?? '', fontB ?? '');
   };
 
   return (
