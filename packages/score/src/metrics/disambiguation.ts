@@ -45,26 +45,36 @@ function diffToScore(worst: number, mean: number): number {
   return Math.max(0, Math.min(1, blended * 1.6));
 }
 
+/** Sizes to test. Using multiple sizes guards against hinting/anti-aliasing artifacts at any single size. */
+const RASTER_SIZES = [12, 16, 32, 64];
+
 export function scoreDisambiguation(
   font: OpenTypeFont,
   rasterize: GlyphRasterizer,
   groups: string[][] = CONFUSABLE_GROUPS,
-  size = 64,
+  sizes: number[] = RASTER_SIZES,
 ): MetricResult {
   const cache = new Map<string, Bitmap | null>();
-  const raster = (ch: string): Bitmap | null => {
-    if (!cache.has(ch)) cache.set(ch, rasterize(font, ch, size));
-    return cache.get(ch) ?? null;
+  const raster = (ch: string, size: number): Bitmap | null => {
+    const key = `${ch}:${size}`;
+    if (!cache.has(key)) cache.set(key, rasterize(font, ch, size));
+    return cache.get(key) ?? null;
   };
 
+  // For each pair, take the worst (lowest) difference across all sizes.
+  // A pair that's confusable at any tested size counts as confusable.
   const pairDiffs: { pair: string; diff: number }[] = [];
   for (const group of groups) {
     for (let i = 0; i < group.length; i++) {
       for (let j = i + 1; j < group.length; j++) {
-        const a = raster(group[i]);
-        const b = raster(group[j]);
-        if (a && b)
-          pairDiffs.push({ pair: `${group[i]}/${group[j]}`, diff: glyphDifference(a, b) });
+        let worstDiff = Infinity;
+        for (const size of sizes) {
+          const a = raster(group[i], size);
+          const b = raster(group[j], size);
+          if (a && b) worstDiff = Math.min(worstDiff, glyphDifference(a, b));
+        }
+        if (worstDiff < Infinity)
+          pairDiffs.push({ pair: `${group[i]}/${group[j]}`, diff: worstDiff });
       }
     }
   }
@@ -93,6 +103,7 @@ export function scoreDisambiguation(
     status,
     detail:
       `Most confusable pair: ${worstPair.pair} (difference ${worstPair.diff.toFixed(2)}). ` +
-      `Mean difference across ${pairDiffs.length} pairs: ${mean.toFixed(2)}. Higher is better.`,
+      `Mean difference across ${pairDiffs.length} pairs: ${mean.toFixed(2)}. Higher is better. ` +
+      `Tested at ${sizes.join(', ')}px.`,
   };
 }
