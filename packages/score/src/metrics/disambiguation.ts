@@ -8,7 +8,6 @@
 import type { OpenTypeFont, Bitmap, GlyphRasterizer, MetricResult } from '../types.js';
 import { METRIC_WEIGHTS, naMetric, scoreToStatus } from './common.js';
 
-/** Single-character confusable groups. Multi-glyph pairs (rn/m, cl/d) are a TODO. */
 export const CONFUSABLE_GROUPS: string[][] = [
   ['I', 'l', '1'],
   ['O', '0', 'o'],
@@ -19,6 +18,10 @@ export const CONFUSABLE_GROUPS: string[][] = [
   ['b', 'd'],
   ['p', 'q'],
   ['c', 'e'],
+  // Multi-glyph string pairs: rendered as strings and compared as bitmaps.
+  ['rn', 'm'],
+  ['cl', 'd'],
+  ['vv', 'w'],
 ];
 
 /**
