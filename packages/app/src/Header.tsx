@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { Logo } from './components/Logo';
-import { IconShare, IconSun, IconMoon, IconQuestion } from './icons';
+import { IconShare, IconSun, IconMoon, IconQuestion, IconFeedback } from './icons';
 
 interface HeaderProps {
   mode: 'light' | 'dark';
@@ -22,6 +22,17 @@ export function Header({ mode, onToggleMode, onShare, onHowItWorks }: HeaderProp
         <Logo />
         <Box sx={{ flex: 1 }} />
 
+        <Tooltip arrow title="Send feedback">
+          <IconButton
+            component="a"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdEFfk81kjNeDqMX-Eb-8I3n-lEKs0gjeTB8j3IfbUEa7FhEQ/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ color: 'text.secondary' }}
+          >
+            <IconFeedback size={20} />
+          </IconButton>
+        </Tooltip>
         <Tooltip arrow title="How Glyphcheck works: scoring methodology and usage guide">
           <IconButton onClick={onHowItWorks} sx={{ color: 'text.secondary' }}>
             <IconQuestion size={20} />
