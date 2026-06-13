@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import { IconInfo, IconRefresh, IconSwap, IconChevron } from '../icons';
 import { ColorField } from '../components/ColorField';
 import { Overline } from '../components/Overline';
@@ -51,6 +53,8 @@ interface ControlsBarProps {
 
 export function ControlsBar({ s, set, onReset }: ControlsBarProps) {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const hideColorLabels = useMediaQuery(theme.breakpoints.down('sm'));
   const trackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const trackDebounced = (setting: string, value: string | number) => {
     if (trackTimer.current) clearTimeout(trackTimer.current);
@@ -78,14 +82,14 @@ export function ControlsBar({ s, set, onReset }: ControlsBarProps) {
 
         <Box sx={{ flex: 1 }} />
 
-        <ColorField label="Text" value={s.fg} onChange={(v) => { set({ fg: v }); trackDebounced('text_color', v); }} />
+        <ColorField label="Text" value={s.fg} hideLabel={hideColorLabels} onChange={(v) => { set({ fg: v }); trackDebounced('text_color', v); }} />
         <Tooltip arrow title="Swap foreground / background (polarity)">
           <IconButton size="small" onClick={() => set({ fg: s.bg, bg: s.fg })}
             sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
             <IconSwap size={16} />
           </IconButton>
         </Tooltip>
-        <ColorField label="Background" value={s.bg} onChange={(v) => { set({ bg: v }); trackDebounced('background_color', v); }} />
+        <ColorField label="Background" value={s.bg} hideLabel={hideColorLabels} onChange={(v) => { set({ bg: v }); trackDebounced('background_color', v); }} />
 
         <Tooltip arrow title={open ? 'Hide text settings' : 'Text size, weight, spacing'}>
           <IconButton size="small" onClick={() => setOpen((v) => !v)}
