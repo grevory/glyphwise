@@ -26,7 +26,7 @@ export function ColorField({ label, value, onChange, hideLabel }: ColorFieldProp
       }} />
       {!hideLabel && (
         <Box sx={{ minWidth: 0 }}>
-          <Overline sx={{ fontSize: 9 }}>{label}</Overline>
+          <Overline sx={{ fontSize: 8 }}>{label}</Overline>
           <Mono sx={{ fontSize: 12, display: 'block', lineHeight: 1.1 }}>{value.toUpperCase()}</Mono>
         </Box>
       )}
