@@ -2,6 +2,7 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { Logo } from './components/Logo';
@@ -20,6 +21,7 @@ export function Header({ mode, onToggleMode, onShare, onHowItWorks }: HeaderProp
       sx={{ bgcolor: 'background.paper', borderBottom: '1px solid', borderColor: 'divider' }}>
       <Toolbar sx={{ gap: 1.5, minHeight: { xs: 60, md: 64 } }}>
         <Logo />
+        <Chip label="Beta" size="small" color="warning" variant="outlined" sx={{ fontWeight: 600, fontSize: '0.7rem' }} />
         <Box sx={{ flex: 1 }} />
 
         <Tooltip arrow title="Use the score library on GitHub">

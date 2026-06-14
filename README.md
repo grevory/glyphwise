@@ -1,6 +1,6 @@
 # Glyphcheck
 
-A client-side font accessibility comparator. Pick up to five typefaces, adjust size and spacing, and get side-by-side contrast and legibility scores — all without uploading anything.
+A font accessibility comparator. Pick up to five typefaces, adjust size and spacing, and get side-by-side contrast and legibility scores. Use fonts from Google Fonts, Bunny Fonts, or upload your own.
 
 **Live site:** https://grevory.github.io/glyphcheck/
 
