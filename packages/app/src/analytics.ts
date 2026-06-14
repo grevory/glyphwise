@@ -23,7 +23,7 @@ export function trackFontSelected(slot: string, fontName: string, fontSource: 's
 
 export function trackCustomFontUploaded(slot: string, fileName: string, fileSizeKb: number): void {
   const ext = fileName.split('.').pop()?.toLowerCase() ?? 'unknown';
-  track('Custom Font Uploaded', { slot, file_format: ext, file_size_kb: fileSizeKb });
+  track('Custom Font Uploaded', { slot, font_name: fileName.replace(/\.[^.]+$/, ''), file_format: ext, file_size_kb: fileSizeKb });
 }
 
 export function trackTabChanged(tabIndex: number, fontA: string, fontB: string): void {
