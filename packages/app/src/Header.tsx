@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { Logo } from './components/Logo';
-import { IconShare, IconSun, IconMoon, IconQuestion, IconFeedback } from './icons';
+import { IconShare, IconSun, IconMoon, IconQuestion, IconFeedback, IconGithub } from './icons';
 
 interface HeaderProps {
   mode: 'light' | 'dark';
@@ -22,6 +22,17 @@ export function Header({ mode, onToggleMode, onShare, onHowItWorks }: HeaderProp
         <Logo />
         <Box sx={{ flex: 1 }} />
 
+        <Tooltip arrow title="Use the score library on GitHub">
+          <IconButton
+            component="a"
+            href="https://github.com/grevory/glyphcheck/tree/main/packages/score"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ color: 'text.secondary' }}
+          >
+            <IconGithub size={20} />
+          </IconButton>
+        </Tooltip>
         <Tooltip arrow title="Send feedback">
           <IconButton
             component="a"

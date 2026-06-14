@@ -41,9 +41,15 @@ const result = scoreFont(font, {
   rasterize: canvasRasterizer,
 });
 
-console.log(result.overall); // 0..100
-console.log(result.grade);   // A, B, C, D, or F
-console.log(result.metrics); // MetricResult[]
+console.log(result.typeface.overall); // 0..100 (typeface-only)
+console.log(result.typeface.grade);   // A, B, C, D, or F
+console.log(result.typeface.metrics); // MetricResult[]
+
+// scenario is set when colors are provided
+console.log(result.scenario?.overall); // 0..100 (typeface + contrast)
+console.log(result.scenario?.grade);
+
+console.log(result.caveats); // string[]
 ```
 
 ## Browser Helpers
@@ -71,10 +77,21 @@ file's OpenType feature metadata.
 Scores a parsed `opentype.js` font and returns:
 
 ```ts
-interface FontAccessibilityScore {
-  overall: number;
+interface TypefaceScore {
+  overall: number;        // 0..100, typeface heuristics only
   grade: 'A' | 'B' | 'C' | 'D' | 'F';
   metrics: MetricResult[];
+}
+
+interface ScenarioScore {
+  overall: number;        // 0..100, typeface + contrast combined
+  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  contrast: MetricResult;
+}
+
+interface FontAccessibilityScore {
+  typeface: TypefaceScore;
+  scenario: ScenarioScore | null; // null when no colors provided
   caveats: string[];
 }
 ```
@@ -109,15 +126,20 @@ Combines custom metric results into the same weighted overall score and grade.
 
 ## Scoring Model
 
-The overall score is a weighted average of metrics with a numeric score. Metrics
-with `status: 'na'` are excluded instead of penalized.
+**Typeface score** — weighted average of typeface metrics. Metrics with
+`status: 'na'` are excluded instead of penalized.
 
-| Metric                   | Weight | Basis                                 |
-| ------------------------ | -----: | ------------------------------------- |
-| Color contrast           |    1.5 | WCAG 2.x ratio plus APCA note         |
-| Character disambiguation |    1.5 | Rasterized glyph difference           |
-| x-height ratio           |    1.0 | x-height relative to cap height       |
+| Metric                   | Weight | Basis                                    |
+| ------------------------ | -----: | ---------------------------------------- |
+| Character disambiguation |    1.5 | Rasterized glyph difference              |
+| x-height ratio           |    1.0 | x-height relative to cap height          |
 | Numeral scanning         |    1.0 | OpenType features + digit advance widths |
+| Stroke contrast          |    1.0 | Placeholder — returns `na` until implemented |
+
+**Scenario score** — blends typeface score (70%) with color contrast (30%).
+Only computed when `foreground` and `background` colors are provided.
+
+Color contrast is scored using WCAG 2.x ratio plus an APCA lightness-contrast note.
 
 Grade bands: A (85–100) · B (70–84) · C (55–69) · D (40–54) · F (0–39)
 
