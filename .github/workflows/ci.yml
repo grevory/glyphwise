@@ -24,6 +24,9 @@ jobs:
       - name: Type-check (score)
         run: npm run typecheck -w packages/score
 
+      - name: Build score (needed for app project references)
+        run: npm run build -w packages/score
+
       - name: Type-check (app)
         run: npm run typecheck -w packages/app
 
