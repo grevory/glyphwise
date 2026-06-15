@@ -30,6 +30,7 @@ export function Header({ mode, onToggleMode, onShare, onHowItWorks }: HeaderProp
             href="https://github.com/grevory/glyphcheck/tree/main/packages/score"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Use the score library on GitHub"
             sx={{ color: 'text.secondary' }}
           >
             <IconGithub size={20} />
@@ -41,23 +42,24 @@ export function Header({ mode, onToggleMode, onShare, onHowItWorks }: HeaderProp
             href="https://docs.google.com/forms/d/e/1FAIpQLSdEFfk81kjNeDqMX-Eb-8I3n-lEKs0gjeTB8j3IfbUEa7FhEQ/viewform"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Send feedback"
             sx={{ color: 'text.secondary' }}
           >
             <IconFeedback size={20} />
           </IconButton>
         </Tooltip>
         <Tooltip arrow title="How Glyphcheck works: scoring methodology and usage guide">
-          <IconButton onClick={onHowItWorks} sx={{ color: 'text.secondary' }}>
+          <IconButton onClick={onHowItWorks} aria-label="How Glyphcheck works: scoring methodology and usage guide" sx={{ color: 'text.secondary' }}>
             <IconQuestion size={20} />
           </IconButton>
         </Tooltip>
         <Tooltip arrow title="Copy share link">
-          <IconButton onClick={onShare} sx={{ color: 'text.secondary' }}>
+          <IconButton onClick={onShare} aria-label="Copy share link" sx={{ color: 'text.secondary' }}>
             <IconShare size={20} />
           </IconButton>
         </Tooltip>
         <Tooltip arrow title={mode === 'dark' ? 'Switch to light' : 'Switch to dark'}>
-          <IconButton onClick={onToggleMode} sx={{ color: 'text.secondary' }}>
+          <IconButton onClick={onToggleMode} aria-label={mode === 'dark' ? 'Switch to light' : 'Switch to dark'} sx={{ color: 'text.secondary' }}>
             {mode === 'dark' ? <IconSun size={20} /> : <IconMoon size={20} />}
           </IconButton>
         </Tooltip>

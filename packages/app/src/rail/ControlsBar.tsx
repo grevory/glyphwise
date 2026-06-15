@@ -40,6 +40,7 @@ function LabeledSlider({ label, value, min, max, step, unit, fmt, onChange }: La
         </Mono>
       </Stack>
       <Slider size="small" value={value} min={min} max={max} step={step}
+        aria-label={label}
         onChange={(_, v) => onChange(v as number)} sx={{ py: 1.1 }} />
     </Box>
   );
@@ -68,6 +69,7 @@ export function ControlsBar({ s, set, onReset }: ControlsBarProps) {
       <ColorField label="Text" value={s.fg} hideLabel={hideColorLabels} onChange={(v) => { set({ fg: v }); trackDebounced('text_color', v); }} />
       <Tooltip arrow title="Swap foreground / background (polarity)">
         <IconButton size="small" onClick={() => set({ fg: s.bg, bg: s.fg })}
+          aria-label="Swap foreground / background (polarity)"
           sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
           <IconSwap size={16} />
         </IconButton>
@@ -85,6 +87,7 @@ export function ControlsBar({ s, set, onReset }: ControlsBarProps) {
           <Box sx={{ flex: 1 }} />
           <Tooltip arrow title={mobileOpen ? 'Hide controls' : 'Style controls'}>
             <IconButton size="small" onClick={() => setMobileOpen((v) => !v)}
+              aria-label={mobileOpen ? 'Hide controls' : 'Style controls'}
               sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, color: mobileOpen ? 'primary.main' : 'text.secondary' }}>
               <Box sx={{ transition: 'transform .2s', transform: mobileOpen ? 'rotate(180deg)' : 'none', display: 'flex' }}>
                 <IconChevron size={16} />
@@ -158,6 +161,7 @@ export function ControlsBar({ s, set, onReset }: ControlsBarProps) {
 
         <Tooltip arrow title={open ? 'Hide text settings' : 'Text size, weight, spacing'}>
           <IconButton size="small" onClick={() => setOpen((v) => !v)}
+            aria-label={open ? 'Hide text settings' : 'Text size, weight, spacing'}
             sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, color: open ? 'primary.main' : 'text.secondary' }}>
             <Box sx={{ transition: 'transform .2s', transform: open ? 'rotate(180deg)' : 'none', display: 'flex' }}>
               <IconChevron size={16} />

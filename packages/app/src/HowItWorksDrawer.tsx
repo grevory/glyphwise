@@ -70,18 +70,20 @@ export function HowItWorksDrawer({ open, onClose }: Props) {
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}
-      slotProps={{ paper: { sx: { width: 'min(440px, 100vw)', bgcolor: 'background.paper' } } }}>
+      slotProps={{
+        paper: { sx: { width: 'min(440px, 100vw)', bgcolor: 'background.paper' }, 'aria-label': 'How Glyphcheck works' } as object,
+      }}>
       <Box sx={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         px: 2.5, py: 1.5, borderBottom: '1px solid', borderColor: 'divider', flexShrink: 0,
       }}>
         <Typography sx={{ fontWeight: 700, fontSize: 18 }}>How Glyphcheck works</Typography>
-        <IconButton onClick={onClose} size="small" sx={{ color: 'text.secondary' }}>
+        <IconButton onClick={onClose} size="small" aria-label="Close" sx={{ color: 'text.secondary' }}>
           <IconClose size={18} />
         </IconButton>
       </Box>
 
-      <Box sx={{ overflowY: 'auto', px: 2.5, pt: 2, pb: 3 }}>
+      <Box tabIndex={0} sx={{ overflowY: 'auto', px: 2.5, pt: 2, pb: 3 }}>
         {/* Usage */}
         <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7, mb: 2.5 }}>
           Pick fonts from the left panel (up to 5). Set your text and background colors in the

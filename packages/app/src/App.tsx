@@ -153,7 +153,7 @@ export default function App() {
 
         <Box sx={{ flex: 1, display: 'flex', minHeight: 0 }}>
           {/* left: fonts */}
-          <Box sx={{
+          <Box tabIndex={0} aria-label="Font selection" sx={{
             width: 312, flexShrink: 0, borderRight: '1px solid', borderColor: 'divider',
             overflowY: 'auto', display: { xs: 'none', md: 'block' }, bgcolor: 'background.paper',
           }}>
@@ -161,7 +161,7 @@ export default function App() {
           </Box>
 
           {/* center: workspace */}
-          <Box sx={{ flex: 1, minWidth: 0, overflowY: 'auto', bgcolor: 'background.default' }}>
+          <Box component="main" tabIndex={-1} sx={{ flex: 1, minWidth: 0, overflowY: 'auto', bgcolor: 'background.default' }}>
             <Box sx={{ display: { xs: 'block', md: 'none' } }}>
               <MobileFontBar activeFonts={s.activeFonts} set={set} registry={registry} onMetricsReady={handleMetricsReady} />
             </Box>
@@ -193,7 +193,7 @@ export default function App() {
           </Box>
 
           {/* right: scores */}
-          <Box sx={{
+          <Box tabIndex={0} aria-label="Legibility scores" sx={{
             width: 324, flexShrink: 0, borderLeft: '1px solid', borderColor: 'divider',
             overflowY: 'auto', display: { xs: 'none', lg: 'block' }, bgcolor: 'background.paper',
           }}>

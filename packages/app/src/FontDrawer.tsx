@@ -176,6 +176,7 @@ export const FontDrawer = React.memo(function FontDrawer({ activeFonts: active, 
           renderInput={(params) => (
             <TextField
               {...params}
+              label="Add a font"
               placeholder={
                 active.length >= MAX_FONTS ? 'Limit reached'
                   : gfError ? 'Add a font... (catalog unavailable)'
