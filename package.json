@@ -12,5 +12,9 @@
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
     "preview": "npm run preview -w packages/app"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0",
+    "wait-on": "^9.0.10"
   }
 }

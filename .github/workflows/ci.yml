@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  # ── Type-check + lint + unit tests ────────────────────────────────────────
+  checks:
+    name: Type-check · lint · tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Type-check (score)
+        run: npm run typecheck -w packages/score
+
+      - name: Type-check (app)
+        run: npm run typecheck -w packages/app
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+  # ── Accessibility audit ───────────────────────────────────────────────────
+  a11y:
+    name: Accessibility (axe-core)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build app
+        run: npm run build -w packages/app
+        env:
+          # a11y audit doesn't need real Google Fonts; omit key so the app
+          # falls back to its built-in font list gracefully.
+          VITE_GOOGLE_FONTS_API_KEY: ''
+
+      - name: Start preview server
+        run: npx vite preview --port 4173 &
+        working-directory: packages/app
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:4173/glyphcheck/ --timeout 30000
+
+      - name: Run axe audit
+        run: node scripts/a11y.mjs http://localhost:4173/glyphcheck/
