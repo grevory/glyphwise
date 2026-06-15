@@ -53,6 +53,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build score
+        run: npm run build -w packages/score
+
       - name: Build app
         run: npm run build -w packages/app
         env:
